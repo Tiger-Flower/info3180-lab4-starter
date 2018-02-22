@@ -9,7 +9,7 @@ from app import app
 from flask import render_template, request, redirect, url_for, flash, session, abort
 from werkzeug.utils import secure_filename
 from forms import UploadForm
-
+rootdir = os.getcwd()
 ###
 # Routing for your application.
 ###
@@ -66,6 +66,20 @@ def logout():
     flash('You were logged out', 'success')
     return redirect(url_for('home'))
 
+def get_uploaded_images():
+    images = []
+    rootdir = os.getcwd()
+    for files in os.walk(rootdir + '/app/static/uploads'):     
+        for file in files:
+            ##images.append( 2009 )
+            images.append(os.path.join(file))
+    return(images[2][1:])
+
+@app.route('/files')
+def files():
+    Images=get_uploaded_images()
+    return render_template('files.html',images=Images)
+    
 
 ###
 # The functions below should be applicable to all Flask apps.
